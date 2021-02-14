@@ -1,0 +1,19 @@
+1
+a - SELECT F.name ,coalesce( (SELECT max(phone) FROM phone P WHERE P.firm_id = F.id),'-') FROM firm F;
+b - SELECT F.name FROM firm F where (SELECT count(phone) FROM phone P WHERE P.firm_id = F.id) = 0;
+c - SELECT F.name FROM firm F where (SELECT count(phone) FROM phone P WHERE P.firm_id = F.id) >= 2;
+d - SELECT F.name FROM firm F where (SELECT count(phone) FROM phone P WHERE P.firm_id = F.id) < 2;
+e - SELECT max(F.name) FROM firm F, phone P where F.id = P.firm_id;
+
+2
+a - SELECT c."name" , g.name, SUM(s.quantity), max(s.shipdate)
+     FROM company c
+     LEFT JOIN shipment s ON c.id = s.company_id
+     LEFT JOIN goods g ON g.id = s.good_id
+     GROUP BY c."name" , g."name";
+b - SELECT c."name" , g.name, SUM(s.quantity), max(s.shipdate)
+     FROM company c
+     LEFT JOIN shipment s ON c.id = s.company_id
+     LEFT JOIN goods g ON g.id = s.good_id
+     where s.shipdate >= CURRENT_DATE + INTERVAL '-30 day'
+     GROUP BY c."name" , g."name";
